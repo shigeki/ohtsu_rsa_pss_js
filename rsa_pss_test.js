@@ -7,13 +7,15 @@ const rsa_pub = fs.readFileSync('./tests/vectors/pub.pem');
 const example11 = test_vector.example11;
 const message = new Buffer(example11.message, 'hex');
 const salt = new Buffer(example11.salt, 'hex');
-const sLen = salt.length
+const sLen = salt.length;
 const mLen = message.length;
 const signature = new Buffer(example11.signature, 'hex');
 const emBits = 1024;
 const emLen = Math.ceil((emBits -1 )/8);;
 const hash_algorithm = 'sha1';
 const hLen = 20;
+
+
 const private_key = {
   key: rsa_secret,
   padding: crypto.constants.RSA_NO_PADDING
@@ -36,7 +38,7 @@ const hash2 = crypto.createHash(hash_algorithm);
 hash2.update(Buffer.concat([padding1, mHash, salt]));
 
 const H = hash2.digest();
-const dbMask = MGF1(H, emLen - hLen - 1)
+const dbMask = MGF1(H, emLen - hLen - 1);
 var maskedDB = BufferXOR(DB, dbMask);
 var b = Buffer.concat([maskedDB, H, new Buffer('bc', 'hex')]);
 var sig = crypto.privateEncrypt(private_key, b);

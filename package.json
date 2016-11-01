@@ -1,0 +1,28 @@
+{
+  "name": "ohtsu_rsa_pss_js",
+  "version": "0.0.1",
+  "description": "RSA utils",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "mocha tests/test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shigeki/ohtsu_rsa_pss_js.git"
+  },
+  "keywords": [
+    "rsa"
+  ],
+  "author": "Shigeki Ohtsu <ohtsu@ohtsu.org>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/shigeki/ohtsu_rsa_pss_js/issues"
+  },
+  "homepage": "https://github.com/shigeki/ohtsu_rsa_pss_js#readme",
+  "dependencies": {
+    "asn1.js": "^4.8.1"
+  }
+}
