@@ -24,20 +24,62 @@ function TestVerify(example, rsa_public, keylen) {
   assert(ret);
 }
 
-describe('test vector', function() {
-  const rsa_secret = fs.readFileSync(__dirname + '/vectors/key.pem');
-  const rsa_public = fs.readFileSync(__dirname + '/vectors/pub-pkcs1.pem');
+describe('test vector example 1', function() {
+  const rsa_secret = fs.readFileSync(__dirname + '/example1_key.pem');
+  const rsa_public = fs.readFileSync(__dirname + '/example1_pub.pem');
   const keylen = 1024;
-  it('should be example11', function() {
+  it('should be example 1.1', function() {
     TestSign(test_vector.example11, rsa_secret, keylen);
     TestVerify(test_vector.example11, rsa_public, keylen);
   });
-  it('should be example12', function() {
+  it('should be example 1.2', function() {
     TestSign(test_vector.example12, rsa_secret, keylen);
     TestVerify(test_vector.example12, rsa_public, keylen);
   });
-  it('should be example13', function() {
+  it('should be example 1.3', function() {
     TestSign(test_vector.example13, rsa_secret, keylen);
     TestVerify(test_vector.example13, rsa_public, keylen);
+  });
+  it('should be example 1.4', function() {
+    TestSign(test_vector.example14, rsa_secret, keylen);
+    TestVerify(test_vector.example14, rsa_public, keylen);
+  });
+  it('should be example 1.5', function() {
+    TestSign(test_vector.example15, rsa_secret, keylen);
+    TestVerify(test_vector.example15, rsa_public, keylen);
+  });
+  it('should be example 1.6', function() {
+    TestSign(test_vector.example16, rsa_secret, keylen);
+    TestVerify(test_vector.example16, rsa_public, keylen);
+  });
+});
+
+describe('test vector example 10', function() {
+  const rsa_secret = fs.readFileSync(__dirname + '/example10_key.pem');
+  const rsa_public = fs.readFileSync(__dirname + '/example10_pub.pem');
+  const keylen = 2048;
+  it('should be example 10.1', function() {
+    TestSign(test_vector.example101, rsa_secret, keylen);
+    TestVerify(test_vector.example101, rsa_public, keylen);
+  });
+  it('should be example 10.2', function() {
+    TestSign(test_vector.example102, rsa_secret, keylen);
+    TestVerify(test_vector.example102, rsa_public, keylen);
+  });
+  it('should be example 10.3', function() {
+    TestSign(test_vector.example103, rsa_secret, keylen);
+    TestVerify(test_vector.example103, rsa_public, keylen);
+  });
+  it('should be example 10.4', function() {
+    TestSign(test_vector.example104, rsa_secret, keylen);
+    TestVerify(test_vector.example104, rsa_public, keylen);
+  });
+  it('should be example 10.5', function() {
+    TestSign(test_vector.example105, rsa_secret, keylen);
+    TestVerify(test_vector.example105, rsa_public, keylen);
+  });
+  it('should be example 10.6', function() {
+    TestSign(test_vector.example106, rsa_secret, keylen);
+    TestVerify(test_vector.example106, rsa_public, keylen);
   });
 });
