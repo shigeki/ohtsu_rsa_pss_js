@@ -39,9 +39,10 @@ OtherPrimeInfos ::= SEQUENCE SIZE(1..MAX) OF OtherPrimeInfo
 
 var RSAPrivateKey = asn.define('RSAPrivateKey', function() {
   this.seq().obj(
-    this.key('hoge1').int(),
+    this.key('version').int(),
     this.seq().obj(
-      this.key('hoge1').null_()
+      this.key('algorithm').objid(),
+      this.any('parameters').any()
     ),
     this.seq().obj(
       this.key('version').int(),

@@ -24,3 +24,49 @@ exports.example11 = {
     '984a601bc69eb28deb27dca12c82c2d4' +
     'c3f66cd500f1ff2b994d8a4e30cbb33c'
 };
+
+
+exports.example12 = {
+  message: '851384cdfe819c22ed6c4ccb30daeb5c' +
+    'f059bc8e1166b7e3530c4c233e2b5f8f' +
+    '71a1cca582d43ecc72b1bca16dfc7013' +
+    '226b9e',
+  salt: 'ef2869fa40c346cb183dab3d7bffc98f' +
+    'd56df42d',
+  signature: '3ef7f46e831bf92b32274142a585ffce' +
+    'fbdca7b32ae90d10fb0f0c729984f04e' +
+    'f29a9df0780775ce43739b97838390db' +
+    '0a5505e63de927028d9d29b219ca2c45' +
+    '17832558a55d694a6d25b9dab66003c4' +
+    'cccd907802193be5170d26147d37b935' +
+    '90241be51c25055f47ef62752cfbe214' +
+    '18fafe98c22c4d4d47724fdb5669e843'
+};
+
+exports.example13 = {
+  message: 'a4b159941761c40c6a82f2b80d1b94f5' +
+    'aa2654fd17e12d588864679b54cd04ef' +
+    '8bd03012be8dc37f4b83af7963faff0d' +
+    'fa225477437c48017ff2be8191cf3955' +
+    'fc07356eab3f322f7f620e21d254e5db' +
+    '4324279fe067e0910e2e81ca2cab31c7' +
+    '45e67a54058eb50d993cdb9ed0b4d029' +
+    'c06d21a94ca661c3ce27fae1d6cb20f4' +
+    '564d66ce4767583d0e5f060215b59017' +
+    'be85ea848939127bd8c9c4d47b51056c' +
+    '031cf336f17c9980f3b8f5b9b6878e8b' +
+    '797aa43b882684333e17893fe9caa6aa' +
+    '299f7ed1a18ee2c54864b7b2b99b7261' +
+    '8fb02574d139ef50f019c9eef4169713' +
+    '38e7d470',
+  salt: '710b9c4747d800d4de87f12afdce6df1' +
+    '8107cc77',
+  signature: '666026fba71bd3e7cf13157cc2c51a8e' +
+    '4aa684af9778f91849f34335d141c001' +
+    '54c4197621f9624a675b5abc22ee7d5b' +
+    'aaffaae1c9baca2cc373b3f33e78e614' +
+    '3c395a91aa7faca664eb733afd14d882' +
+    '7259d99a7550faca501ef2b04e33c23a' +
+    'a51f4b9e8282efdb728cc0ab09405a91' +
+    '607c6369961bc8270d2d4f39fce612b1'
+};

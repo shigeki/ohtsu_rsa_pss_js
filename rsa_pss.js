@@ -1,8 +1,6 @@
 const assert = require('assert');
 const crypto = require('crypto');
 const fs = require('fs');
-const asn = require('asn1.js');
-const BN = require('bn.js');
 
 const hashLength = {
   'sha1' : 20,
@@ -17,8 +15,9 @@ function RSAPSS() {
 
 }
 
-RSAPSS.prototype.sign = function(rsa_secret, hash_algorithm, message, saltlen, salt) {
+RSAPSS.prototype.sign = function(rsa_secret, keylen, hash_algorithm, message, saltlen, salt) {
   assert(Buffer.isBuffer(rsa_secret));
+  assert.strictEqual(typeof keylen, 'number');
   assert.strictEqual(typeof hash_algorithm, 'string');
   assert(Buffer.isBuffer(message));
   assert.strictEqual(typeof saltlen, 'number');
@@ -28,13 +27,12 @@ RSAPSS.prototype.sign = function(rsa_secret, hash_algorithm, message, saltlen, s
   } else {
     salt = crypto.randomBytes(saltlen);
   }
+  const emBits = keylen - 1;
   const sLen = saltlen;
   const hLen = hashLength[hash_algorithm];
   assert(hLen);
   const mLen = message.length;
-  const secret = ParseRSAPrivateKey(rsa_secret);
-  const emLen = secret.modulus.toBuffer().length;
-
+  const emLen = Math.ceil(emBits/8);
   const padding1 = Buffer.alloc(8);
   const hash1 = crypto.createHash(hash_algorithm);
   hash1.update(message);
@@ -57,6 +55,7 @@ RSAPSS.prototype.sign = function(rsa_secret, hash_algorithm, message, saltlen, s
     key: rsa_secret,
     padding: crypto.constants.RSA_NO_PADDING
   };
+  b[0] = b[0] & 0x7f;
   var signature = crypto.privateEncrypt(private_key, b);
 
   return signature;
@@ -91,69 +90,4 @@ function BufferXOR(a, b) {
     c[i] = a[i] ^ b[i];
   }
   return c;
-}
-
-
-/*
-RSAPrivateKey ::= SEQUENCE {
-          version           Version,
-          modulus           INTEGER,  -- n
-          publicExponent    INTEGER,  -- e
-          privateExponent   INTEGER,  -- d
-          prime1            INTEGER,  -- p
-          prime2            INTEGER,  -- q
-          exponent1         INTEGER,  -- d mod (p-1)
-          exponent2         INTEGER,  -- d mod (q-1)
-          coefficient       INTEGER,  -- (inverse of q) mod p
-          otherPrimeInfos   OtherPrimeInfos OPTIONAL
-      }
-Version ::= INTEGER { two-prime(0), multi(1) }
-            (CONSTRAINED BY
-            {-- version must be multi if otherPrimeInfos present --})
-OtherPrimeInfos ::= SEQUENCE SIZE(1..MAX) OF OtherPrimeInfo
-         OtherPrimeInfo ::= SEQUENCE {
-             prime             INTEGER,  -- ri
-             exponent          INTEGER,  -- di
-             coefficient       INTEGER   -- ti
-         }
-*/
-
-const RSAPrivateKey = asn.define('RSAPrivateKey', function() {
-  this.seq().obj(
-    this.key('version').int(),
-    this.key('modulus').int(),
-    this.key('publicExponent').int(),
-    this.key('privateExponent').int(),
-    this.key('prime1').int(),
-    this.key('prime2').int(),
-    this.key('exponent1').int(),
-    this.key('exponent2').int(),
-    this.key('coefficient').int(),
-    this.optional('otherPrimeInfos').seq().obj(
-      this.key('prime').int(),
-      this.key('exponent').int(),
-      this.key('coefficient').int()
-    )
-  );
-});
-
-function ParseRSAPrivateKey(rsa_secret) {
-  return RSAPrivateKey.decode(rsa_secret, 'pem');
-}
-
-/*
-RSAPublicKey ::= SEQUENCE {
-          modulus           INTEGER,  -- n
-          publicExponent    INTEGER   -- e
-      }
-*/
-const RSAPublicKey = asn.define('RSAPublicKey', function() {
-  this.seq().obj(
-    this.key('modulus').int(),
-    this.key('publicExponent').int()
-  );
-});
-
-function ParseRSAPublicKey(rsa_public) {
-  return RSAPublicKey.decode(rsa_public, 'pem');
 }
