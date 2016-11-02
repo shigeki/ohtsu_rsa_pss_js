@@ -61,8 +61,54 @@ RSAPSS.prototype.sign = function(rsa_secret, keylen, hash_algorithm, message, sa
   return signature;
 };
 
-RSAPSS.prototype.verify = function(public_key, signature) {
+RSAPSS.prototype.verify = function(rsa_public, keylen, hash_algorithm, message, sLen, signature) {
+  assert(Buffer.isBuffer(rsa_public));
+  assert.strictEqual(typeof keylen, 'number');
+  assert.strictEqual(typeof hash_algorithm, 'string');
+  assert(Buffer.isBuffer(message));
+  assert.strictEqual(typeof sLen, 'number');
+  assert(Buffer.isBuffer(signature));
+  const public_key = {
+    key: rsa_public,
+    padding: crypto.constants.RSA_NO_PADDING
+  };
+  var m = crypto.publicDecrypt(public_key, signature);
 
+  const emBits = keylen -1;
+  const hLen = hashLength[hash_algorithm];
+  assert(hLen);
+  const mLen = message.length;
+  const emLen = Math.ceil(emBits/8);
+
+  const hash1 = crypto.createHash(hash_algorithm);
+  hash1.update(message);
+  const mHash = hash1.digest();
+
+  if (emLen < hLen + sLen + 2)
+    throw new Error("inconsistent");
+
+  if (m[m.length-1] !== 0xbc)
+    throw new Error("inconsistent");
+
+  const maskedDB = m.slice(0,  emLen - hLen - 1);
+  const H = m.slice(emLen - hLen - 1, emLen -1);
+
+  if ((maskedDB[0] & 0x80) !== 0x00)
+    throw new Error("inconsistent");
+
+  const dbMask = MGF1(H, emLen - hLen - 1, hash_algorithm);
+  const  DB = BufferXOR(maskedDB, dbMask);
+  DB[0] = DB[0] & 0x7f;
+  for(var i = 0; i < emLen - hLen - sLen - 2; i++) {
+    assert.strictEqual(DB[i], 0x00);
+  }
+  assert.strictEqual(DB[emLen - hLen - sLen - 2], 0x01);
+  const salt = DB.slice(-sLen);
+  const MDash = Buffer.concat([Buffer.alloc(8), mHash, salt]);
+  const hash2 = crypto.createHash(hash_algorithm);
+  hash2.update(MDash);
+  const HDash = hash2.digest();
+  return HDash.equals(H);
 };
 
 function MGF1(mgfSeed, maskLen, hash_algorithm) {
